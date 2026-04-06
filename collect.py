@@ -5,7 +5,10 @@ import json
 import sqlite3
 import urllib.request
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 from pathlib import Path
+
+TZ = ZoneInfo("America/New_York")
 
 DB = Path(__file__).parent / "gym.db"
 API_URL = "https://jjyczft24vcqfkzngwy5xkl2gi.appsync-api.us-west-2.amazonaws.com/graphql"
@@ -58,7 +61,7 @@ CLOSE_HOUR = 24  # midnight
 
 
 def main():
-    now = datetime.now()
+    now = datetime.now(TZ)
     if not (OPEN_HOUR <= now.hour < CLOSE_HOUR):
         print(f"Gym closed at {now:%H:%M}, skipping.")
         return
