@@ -26,12 +26,24 @@ jobs:
       - name: Generate charts
         run: python plot.py
 
-      - name: Commit updated DB and charts
+      - name: Commit updated DB
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add gym.db
-          # Commit the chart only once per hour to keep repo size small
-          [ "$(date -u +%M)" -lt 5 ] && git add charts.png || true
           git diff --cached --quiet || git commit -m "data: $(date -u '+%Y-%m-%d %H:%M') UTC"
           git push
+
+      - name: Push chart to orphan branch (no history)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          cd /tmp
+          git init charts-tmp
+          cd charts-tmp
+          git checkout --orphan charts
+          cp $GITHUB_WORKSPACE/charts.png .
+          git add charts.png
+          git commit -m "chart"
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git push origin charts --force
