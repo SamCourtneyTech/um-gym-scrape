@@ -53,8 +53,16 @@ def fetch():
         return json.loads(resp.read())
 
 
+OPEN_HOUR  = 6   # 6am
+CLOSE_HOUR = 24  # midnight
+
+
 def main():
     now = datetime.now()
+    if not (OPEN_HOUR <= now.hour < CLOSE_HOUR):
+        print(f"Gym closed at {now:%H:%M}, skipping.")
+        return
+
     conn = sqlite3.connect(DB)
     init_db(conn)
 
