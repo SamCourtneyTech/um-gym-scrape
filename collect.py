@@ -2,6 +2,7 @@
 """Poll the Herbert Wellness Center busyness every ~3 min via cron."""
 
 import json
+import os
 import sqlite3
 import urllib.request
 from datetime import datetime, timezone
@@ -12,7 +13,7 @@ TZ = ZoneInfo("America/New_York")
 
 DB = Path(__file__).parent / "gym.db"
 API_URL = "https://jjyczft24vcqfkzngwy5xkl2gi.appsync-api.us-west-2.amazonaws.com/graphql"
-API_KEY = "da2-mrm36auugfbptnau2b3mib4lzi"
+API_KEY = os.environ["WAITZ_API_KEY"]
 SITE_URI = "jht42tw9feut"
 
 QUERY = """

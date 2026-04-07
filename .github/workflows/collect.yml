@@ -22,6 +22,8 @@ jobs:
 
       - name: Collect reading
         run: python collect.py
+        env:
+          WAITZ_API_KEY: ${{ secrets.WAITZ_API_KEY }}
 
       - name: Generate charts
         run: python plot.py
